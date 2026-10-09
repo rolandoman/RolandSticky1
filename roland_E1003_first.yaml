@@ -1,1 +1,472 @@
+# =============================================================================
+# reTerminal E1003 - ESPHome Full Hardware Example
+# All ESPHome-supported onboard peripherals enabled in the most basic way
+# =============================================================================
+#
+# Hardware list:
+#   1. 10.3" 16-level grayscale ePaper display (1872x1404, IT8951)
+#   2. 3x buttons (GPIO3, GPIO4, GPIO5)
+#   3. Buzzer (GPIO45, PWM)
+#   4. Onboard LED (GPIO16)
+#   5. Battery voltage (GPIO1 ADC + GPIO40 EN)
+#   6. SHT4x temp & humidity sensor (I2C)
+#   7. PCF8563 RTC (I2C addr 0x51, CR1220 backup)
+#   8. PDM Microphone (CLK=42, DATA=41, EN=38)
+#   9. MicroSD card slot (SPI + DET=15, EN=39)
+#  10. Deep sleep with button wake-up
+#
+# Requires ESPHome >= 2026.7.0 for the it8951 display platform.
+# GT911 capacitive touch is available through the ESPHome touchscreen component.
+#
+# Serial debug: UART0 via CH340K USB bridge
+# =============================================================================
+substitutions:
+  device_name: reterminal-e1003
+  friendly_name: "reTerminal_E1003"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  includes:
+    - S_buttons_config.h
+  on_boot:
+    priority: -100
+    then:
+      # Turn on SD card power rail / 打开 SD 卡供电
+      - output.turn_on: bsp_sd_enable
+      # Turn on battery measurement circuit
+      - output.turn_on: bsp_battery_enable
+      # Turn on microphone power / 打开麦克风供电
+      - output.turn_on: mic_power_enable
+      # Wait for voltages to stabilize / 等待电压稳定
+      - delay: 200ms
+      # Take the first temperature and humidity reading
+      # 采集首次温湿度读数
+      - component.update: sht4x_sensor
+      - wait_until:
+          condition:
+            lambda: return id(temp_sensor).has_state() && id(hum_sensor).has_state();
+          timeout: 5s
+      # Take first battery reading / 采集首次电池读数
+      - component.update: battery_voltage
+      - component.update: battery_level
+      # Read RTC time on boot / 启动时读取 RTC 时间
+      - pcf8563.read_time:
+      # Run a short LED and buzzer self-test / 运行 LED 与蜂鸣器短时自检
+      - light.turn_on: onboard_led
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 250ms
+      - light.turn_off: buzzer
+      - light.turn_off: onboard_led
+      - delay: 2s
+      - it8951.update:
+          id: epaper_display
+          mode: GC16
+
+esp32:
+  board: seeed_xiao_esp32s3
+  framework:
+    type: esp-idf
+
+
+# OPI PSRAM stores the full 16-level grayscale framebuffer.
+# The IT8951 display requires this external memory on E1003.
+psram:
+  mode: octal
+
+# Enable serial logging / 启用串口日志
+# The reTerminal E series has a CH340K USB-to-UART bridge on UART0.
+# Default ESP32-S3 logger uses USB_CDC — won't produce output on the physical port.
+# reTerminal E 系列板载 CH340K 桥接芯片，串口走 UART0，非默认的 USB_CDC。
+logger:
+  hardware_uart: UART0
+
+# =============================================================================
+# Fonts / 字体
+# =============================================================================
+
+font:
+  - file: "gfonts://Inter@700"
+    id: font_small
+    size: 20
+  - file: "gfonts://Inter@700"
+    id: font_medium
+    size: 32
+  - file: "gfonts://Inter@700"
+    id: font_large
+    size: 48
+
+# SPI — shared by ePaper display and SD card
+# SPI — 墨水屏和 SD 卡共用
+spi:
+  id: epaper_spi_bus
+  clk_pin: GPIO7
+  mosi_pin: GPIO9
+  # MISO is needed for SD card reading (ePaper is write-only)
+  # MISO 用于 SD 卡读取（墨水屏只写不读）
+  miso_pin: GPIO8
+
+# I2C — shared by SHT4x sensor, PCF8563 RTC
+# I2C — SHT4x 传感器和 PCF8563 实时时钟共用
+i2c:
+  scl: GPIO20
+  sda: GPIO19
+
+# I2S audio bus — for the onboard PDM microphone
+# I2S 音频总线 — 用于板载 PDM 麦克风
+# i2s_lrclk_pin serves as the PDM clock output in PDM mode
+# PDM 模式下 i2s_lrclk_pin 充当 PDM 时钟输出
+i2s_audio:
+  i2s_lrclk_pin: GPIO42
+
+output:
+  # [4] Onboard LED (active low) / 板载 LED（低电平有效）
+  - platform: gpio
+    pin: GPIO16
+    id: bsp_led
+    inverted: true
+
+  # [9] SD card power enable
+  - platform: gpio
+    pin: GPIO39
+    id: bsp_sd_enable
+
+  # [5] Battery measurement enable
+  - platform: gpio
+    pin: GPIO40
+    id: bsp_battery_enable
+
+  # [3] Buzzer PWM output
+  - platform: ledc
+    pin: GPIO45
+    id: buzzer_pwm
+    frequency: 1000Hz
+
+  # [8] Microphone power enable (TPS22916 load switch)
+  # 麦克风供电使能（TPS22916 负载开关）
+  # Must be HIGH before recording / 录音前必须拉高
+  - platform: gpio
+    pin: GPIO38
+    id: mic_power_enable
+
+sensor:
+  # --- Battery voltage (ADC on GPIO1) ---
+  - platform: adc
+    pin: GPIO1
+    name: "Battery Voltage"
+    id: battery_voltage
+    update_interval: 60s
+    attenuation: 12db
+    filters:
+      # Compensate for onboard voltage divider (1:2)
+      # 补偿板载分压电阻（1:2 比例）
+      - multiply: 2.0
+
+  # --- Battery level (percentage) ---
+  - platform: template
+    name: "Battery Level"
+    id: battery_level
+    unit_of_measurement: "%"
+    icon: "mdi:battery"
+    device_class: battery
+    state_class: measurement
+    lambda: 'return id(battery_voltage).state;'
+    update_interval: 60s
+    filters:
+      - calibrate_linear:
+          - 4.15 -> 100.0
+          - 3.96 -> 90.0
+          - 3.91 -> 80.0
+          - 3.85 -> 70.0
+          - 3.80 -> 60.0
+          - 3.75 -> 50.0
+          - 3.68 -> 40.0
+          - 3.58 -> 30.0
+          - 3.49 -> 20.0
+          - 3.41 -> 10.0
+          - 3.30 -> 5.0
+          - 3.27 -> 0.0
+      - clamp:
+          min_value: 0
+          max_value: 100
+
+  # --- SHT4x temperature & humidity (I2C) ---
+  - platform: sht4x
+    id: sht4x_sensor
+    temperature:
+      name: "Temperature"
+      id: temp_sensor
+    humidity:
+      name: "Relative Humidity"
+      id: hum_sensor
+    update_interval: 60s
+
+binary_sensor:
+  # KEY0 (GPIO3)
+  - platform: gpio
+    pin:
+      number: GPIO3
+      allow_other_uses: true
+      mode: INPUT
+      inverted: true
+    id: button_1
+    name: "KEY0 Right Green Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - logger.log: "KEY0 (GPIO3) pressed"
+
+  # KEY1 (GPIO4)
+  - platform: gpio
+    pin:
+      number: GPIO4
+      mode: INPUT
+      inverted: true
+    id: button_2
+    name: "KEY1 Middle Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - logger.log: "KEY1 (GPIO4) pressed"
+
+  # KEY2 (GPIO5)
+  - platform: gpio
+    pin:
+      number: GPIO5
+      mode: INPUT
+      inverted: true
+    id: button_3
+    name: "KEY2 Left Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - logger.log: "KEY2 (GPIO5) pressed"
+
+  # [9] SD card detect (LOW = card present)
+  # SD 卡检测（低电平 = 卡已插入）
+  #
+  # NOTE on SD card in ESPHome:
+  # ESPHome cannot directly access the SD card file system (read/write files,
+  # create directories, etc.) the way Arduino can. In ESPHome, the SD card is
+  # used indirectly by specific components:
+  #   - online_image: caches downloaded images to SD card
+  #   - media_player: plays audio files stored on the card
+  #   - Works with PSRAM for large buffer allocation
+  # For direct file operations (e.g. recording WAV files), use the Arduino framework.
+  #
+  # ESPHome 中 SD 卡的限制：
+  # ESPHome 不能像 Arduino 那样直接操作 SD 卡文件系统（读写文件、创建目录等）。
+  # SD 卡在 ESPHome 中由特定组件间接使用：
+  #   - online_image：将下载的图片缓存到 SD 卡
+  #   - media_player：播放卡上存储的音频文件
+  #   - 配合 PSRAM 做大缓冲
+  # 如需直接操作文件（如录音存 WAV），请使用 Arduino 框架。
+  - platform: gpio
+    pin:
+      number: GPIO15
+      mode: INPUT_PULLUP
+      inverted: true
+    id: sd_card_detect
+    name: "SD Card Detected"
+
+light:
+  - platform: binary
+    name: "Onboard LED"
+    output: bsp_led
+    id: onboard_led
+
+  # Buzzer wrapped as a "light": brightness = volume
+  # 蜂鸣器包装成"灯"实体：亮度 = 音量
+  - platform: monochromatic
+    output: buzzer_pwm
+    name: "Buzzer"
+    id: buzzer
+    default_transition_length: 0s
+
+time:
+  # PCF8563 is at I2C address 0x51 with a CR1220 coin cell backup.
+  # On boot we read the RTC; when HA syncs, we write back to the RTC.
+  # PCF8563 在 I2C 地址 0x51，由 CR1220 纽扣电池备份。
+  # 启动时读取 RTC；当 HA 同步时间后，回写到 RTC。
+  - platform: pcf8563
+    id: rtc_time
+    address: 0x51
+    # No periodic re-reads needed; HA sync handles it
+    # 无需定期重读；HA 同步来处理
+    update_interval: never
+
+  - platform: homeassistant
+    # When HA pushes a time sync, write it to the hardware RTC
+    # 当 HA 推送时间同步时，写入硬件 RTC
+    on_time_sync:
+      then:
+        - pcf8563.write_time:
+
+# Home Assistant native API / Home Assistant 原生 API
+api:
+  encryption:
+    key: "5+gUSCBgEiuwgZWlsEFOHLHEmrxYFfZEXHbj8QolABo="
+
+
+
+# OTA (Over-The-Air) firmware update / 空中固件更新
+ota:
+  - platform: esphome
+    password: "stickyupdatepassword"
+
+# Wi-Fi settings / Wi-Fi 设置
+wifi:
+  ssid: "IrregularApocalypse"
+  password: "S1!gnus1B1138"
+  ap:
+    ssid: "reTerminal-E1003"
+    password: "ChangeMe123"
+
+captive_portal:
+
+# =============================================================================
+# [8] PDM Microphone / PDM 麦克风
+# =============================================================================
+# The onboard PDM mic outputs a 1-bit sigma-delta stream.
+# ESP32-S3 built-in PDM peripheral decodes it — no external codec needed.
+# 板载 PDM 麦克风输出 1 位 sigma-delta 流。
+# ESP32-S3 内置 PDM 外设解码 — 无需外部编解码器。
+#
+# In HA, this microphone can be used with Voice Assistant / Assist Pipeline.
+# 在 HA 中，此麦克风可配合语音助手 / Assist 管道使用。
+
+microphone:
+  - platform: i2s_audio
+    id: onboard_mic
+    adc_type: external
+    pdm: true
+    i2s_din_pin: GPIO41
+
+# =============================================================================
+# [11] GT911 capacitive touchscreen
+# =============================================================================
+
+touchscreen:
+  - platform: gt911
+    id: e1003_touch
+    display: epaper_display
+    interrupt_pin: GPIO2
+    reset_pin: GPIO48
+    transform:
+      mirror_x: true
+      mirror_y: true
+    on_touch:
+      - logger.log:
+          format: "Touch: x=%d, y=%d"
+          args: ["touch.x", "touch.y"]
+
+# =============================================================================
+# [1] ePaper display (10.3" 16-level grayscale, 1872x1404, IT8951)
+# Requires ESPHome >= 2026.7.0
+# =============================================================================
+
+display:
+  - platform: it8951
+    id: epaper_display
+    spi_id: epaper_spi_bus
+    model: seeed-reterminal-e1003
+    update_interval: never
+    full_update_every: 30
+    grayscale: true
+    dithering: true
+    update_mode: GC16
+    transform:
+      mirror_x: true
+      mirror_y: false
+    lambda: |-
+      ESP_LOGD("display", "=== ePaper display refresh ===");
+      it.fill(Color::WHITE);
+
+      it.printf(936, 35, id(font_large), Color::BLACK, TextAlign::TOP_CENTER,
+                "reTerminal E1003 Dashboard");
+      it.line(70, 120, 1802, 120, Color::BLACK);
+
+      auto now = id(rtc_time).now();
+      if (now.is_valid()) {
+        it.strftime(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
+                    "%Y-%m-%d  %H:%M", now);
+        ESP_LOGD("display", "RTC time: %04d-%02d-%02d %02d:%02d",
+                 now.year, now.month, now.day_of_month, now.hour, now.minute);
+      } else {
+        it.printf(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
+                  "RTC: waiting for sync...");
+        ESP_LOGW("display", "RTC: not synced yet");
+      }
+
+      if (id(temp_sensor).has_state()) {
+        ESP_LOGD("display", "Temperature: %.1f C", id(temp_sensor).state);
+        it.printf(100, 300, id(font_large), Color::BLACK, "Temp: %.1f C", id(temp_sensor).state);
+      } else {
+        ESP_LOGW("display", "Temperature: NO DATA");
+        it.printf(100, 300, id(font_large), Color::BLACK, "Temp: -- C");
+      }
+
+      if (id(hum_sensor).has_state()) {
+        ESP_LOGD("display", "Humidity: %.1f %%", id(hum_sensor).state);
+        it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  %.1f %%", id(hum_sensor).state);
+      } else {
+        ESP_LOGW("display", "Humidity: NO DATA");
+        it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  -- %%");
+      }
+
+      if (id(battery_level).has_state()) {
+        ESP_LOGD("display", "Battery: %.0f%%  Voltage: %.2fV",
+                 id(battery_level).state, id(battery_voltage).state);
+        it.printf(100, 600, id(font_medium), Color::BLACK, "Battery: %.0f%%  (%.2fV)",
+                  id(battery_level).state, id(battery_voltage).state);
+      } else {
+        it.printf(100, 600, id(font_medium), Color::BLACK, "Battery: --");
+      }
+
+      if (id(sd_card_detect).state) {
+        it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: inserted");
+      } else {
+        it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: not detected");
+      }
+
+      it.printf(100, 840, id(font_small), Color::BLACK, "PDM Microphone: enabled (GPIO41/42)");
+
+      it.line(70, 1080, 1802, 1080, Color::BLACK);
+      it.printf(100, 1110, id(font_small), Color::BLACK, "KEY0 GPIO3: Right green button");
+      it.printf(100, 1150, id(font_small), Color::BLACK, "KEY1 GPIO4: Middle button");
+      it.printf(100, 1190, id(font_small), Color::BLACK, "KEY2 GPIO5: Left button");
+
+      it.printf(936, 1350, id(font_small), Color::BLACK, TextAlign::TOP_CENTER,
+                "Selected reTerminal hardware features enabled");
+
+# =============================================================================
+# [10] Deep sleep
+# The device wakes, updates sensors and display, then sleeps.
+# Press the right green KEY0 button (GPIO3) to wake manually at any time.
+# =============================================================================
+
+deep_sleep:
+  id: deep_sleep_1
+  run_duration: 90s
+  sleep_duration: 5min
+  esp32_ext1_wakeup:
+    pins:
+      - number: GPIO3
+        allow_other_uses: true
+        mode: INPUT_PULLUP
+    mode: ANY_LOW
+
+# secrets.yaml (create this file alongside your config):
+# wifi_ssid: "Your WiFi SSID"
+# wifi_password: "Your WiFi Password"
+# ota_password: "choose-a-strong-password"
+# api_encryption_key: "generate with: openssl rand -base64 32"
 
