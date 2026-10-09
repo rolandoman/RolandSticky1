@@ -536,35 +536,10 @@ display:
           it.rectangle(60, 280, 360, 60, COLOR_OFF);
           it.printf(240, 290, id(font_medium), COLOR_OFF, TextAlign::TOP_CENTER, "LIGHTING CONTROL");
       
-          // All LIGHTS BUTTON
-          it.rectangle(60, 340, 360, 120, COLOR_OFF);
-          it.printf(240, 350, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, "ALL LIGHTS");
-          it.printf(240, 380, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, "TURN ON");
-      
-          // LIVING ROOM BUTTON 60,460
-          it.rectangle(60, 460, 180, 120, COLOR_OFF);
-          it.printf(150, 470, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, "LIVINGROOM");
-          it.printf(150, 500, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, "ON");
-      
-          // COUCH LAMP BUTTON 240,460
-          it.rectangle(240, 460, 180, 120, COLOR_OFF);
-          it.printf(330, 470, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, "COUCH LAMP");
-          it.printf(330, 500, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, "ON");
-      
-          // KITCHEN BUTTON 60,580
-          it.rectangle(60, 580, 180, 120, COLOR_OFF);
-          it.printf(150, 590, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, "KITCHEN");
-          it.printf(150, 620, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, "ON");
-      
-          // HALLWAY BUTTON 240,580
-          it.rectangle(240, 580, 180, 120, COLOR_OFF);
-          it.printf(330, 590, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, "HALLWAY");
-          it.printf(330, 620, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, "ON");
-
           for (int i = 0; i < NUM_BUTTONS; i++) {
-            it.rectangle(int BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 , int BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2, BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
-            it.printf(int BUTTON_ARRAY[i].x, int BUTTON_ARRAY[i].y - 50, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
-            it.printf(int BUTTON_ARRAY[i].x, int BUTTON_ARRAY[i].y - 20, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, , BUTTON_ARRAY[i].action_label_on);
+            it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, , BUTTON_ARRAY[i].action_label_on);
           }
 
 
