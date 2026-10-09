@@ -39,16 +39,16 @@ esphome:
   on_boot:
     priority: 600
     then:
-      # Hold power rails on / 保持电源轨开启
+      # Hold power rails on 
       - output.turn_on: pwr_hold
       - output.turn_on: pwr_lock
-      # Turn on microphone power / 打开麦克风供电
+      # Turn on microphone power 
       - output.turn_on: mic_power_enable
-      # Turn on touch panel power / 打开触摸供电
+      # Turn on touch panel power 
       - switch.turn_on: touch_power_enable
-      # Read RTC time on boot / 启动读取 RTC 时间
+      # Read RTC time on boot
       - pcf8563.read_time:
-      # Turn on SD card power rail / 打开 SD 卡供电
+      # Turn on SD card power rail
       - output.turn_on: bsp_sd_enable
 
       - display.page.show: page_dashboard
