@@ -39,7 +39,7 @@ Write-Host "`n[2/2] Running ESPHome build and upload for '$ConfigFile'..." -Fore
 try {
     # 'esphome run' compiles the code and uploads it. 
     # If you need a specific port or OTA target, you can append flags like: --device COM3
-    esphome run $ConfigFile
+    esphome run $ConfigFile --device COM5
     
     if ($LASTEXITCODE -ne 0) {
         throw "ESPHome build/upload failed (exit code $LASTEXITCODE)."
