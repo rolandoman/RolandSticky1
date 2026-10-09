@@ -530,7 +530,7 @@ display:
           }
       
           //
-          // Lighting Section Banner
+          // Lighting Button Section Banner
           //
       
           it.rectangle(60, 280, 360, 60, COLOR_OFF);
@@ -560,6 +560,15 @@ display:
           it.rectangle(240, 580, 180, 120, COLOR_OFF);
           it.printf(330, 590, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, "HALLWAY");
           it.printf(330, 620, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, "ON");
+
+          for (int i = 0; i < NUM_BUTTONS; i++) {
+            it.rectangle(int BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 , int BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2, BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+            it.printf(int BUTTON_ARRAY[i].x, int BUTTON_ARRAY[i].y - 50, id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+            it.printf(int BUTTON_ARRAY[i].x, int BUTTON_ARRAY[i].y - 20, id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, , BUTTON_ARRAY[i].action_label_on);
+          }
+
+
+
 
 
           // ---- Battery / 电池 ----
