@@ -1,4 +1,5 @@
 @'
+
 <#
 .SYNOPSIS
     update-and-flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
@@ -55,4 +56,4 @@ Write-Host "---------------------------------------------------" -ForegroundColo
 Write-Host "`n=============================================" -ForegroundColor Green
 Write-Host " Process Complete!" -ForegroundColor Green
 Write-Host "=============================================" -ForegroundColor Green
-@'
+'@
