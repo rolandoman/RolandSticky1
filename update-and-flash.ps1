@@ -1,4 +1,3 @@
-@'
 
 <#
 .SYNOPSIS
@@ -56,4 +55,3 @@ Write-Host "---------------------------------------------------" -ForegroundColo
 Write-Host "`n=============================================" -ForegroundColor Green
 Write-Host " Process Complete!" -ForegroundColor Green
 Write-Host "=============================================" -ForegroundColor Green
-'@
