@@ -563,8 +563,8 @@ display:
 
             bool is_pressed = (id(global_touch_index) == i);
             ESP_LOGD("display_lambda","is_pressed=%d",is_pressed);
-            ESP_LOGD("display_lambda",id(ha_all_lights_state).state);
-            if (i==0 && id(ha_all_lights_state).state == "active") {
+            //ESP_LOGD("display_lambda",id(ha_all_lights_state).state);
+            if (i == 0 && strcmp(id(ha_all_lights_state).current_option().c_str(), "active") == 0) {
               it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
               it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
               it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
