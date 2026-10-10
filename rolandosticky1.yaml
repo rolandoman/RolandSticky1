@@ -421,7 +421,7 @@ touchscreen:
           int x_start = btn.x - (btn.width / 2);
           int y_start = btn.y - (btn.height / 2);
           
-          id(my_display).update_window(x_start, y_start, btn.width, btn.height);
+          id(epaper_display).update_window(x_start, y_start, btn.width, btn.height);
            
     on_release:
       - lambda: |-
