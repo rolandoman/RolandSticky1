@@ -556,8 +556,7 @@ display:
       
           for (int i = 0; i < NUM_BUTTONS; i++) {
 
-            bool is_pressed = false;
-            if (global_touch_index != -1 ) {is_pressed = true;}
+            bool is_pressed = (id(global_touch_index) == i);
 
             if (is_pressed) {
               it.filled.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, Color::BLACK);
