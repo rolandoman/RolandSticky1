@@ -557,7 +557,7 @@ display:
           for (int i = 0; i < NUM_BUTTONS; i++) {
 
             bool is_pressed = (id(global_touch_index) == i);
-
+            ESP_LOGD("display_lambda","is_pressed=%d",is_pressed)
             if (is_pressed) {
               it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, Color::BLACK);
             } else {
