@@ -345,15 +345,64 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
-      - lambda: |-
-          id(global_touch_index) = 0; // Save the active array loop index
-    on_release:
-      - lambda: |-
-          id(global_touch_index) = -1; // Reset back to no touch
-    
+      #- lambda: |-
+      #    id(global_touch_index) = 0; // Save the active array loop index
+    #on_release:
+      #- lambda: |-
+      #    id(global_touch_index) = -1; // Reset back to no touch
+
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY LIVINGROOM TOUCH BUTTON"
+    id: livingroom_touch
+    # Define the bounding box coordinates on your screen
+    #// All LIGHTS BUTTON
+    #it.rectangle(60, 340, 360, 120, COLOR_OFF);
+    x_min: 60
+    x_max: 240
+    y_min: 460
+    y_max: 580
+    on_press:
+      - logger.log: "Livingroom Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+      #- lambda: |-
+      #    id(global_touch_index) = 1; // Save the active array loop index
+    #on_release:
+      #- lambda: |-
+      #    id(global_touch_index) = -1; // Reset back to no touch
+
+
+
+
+
+
+
+
+
+
   - platform: homeassistant
     id: ha_all_lights_state
     entity_id: light.allmylights
+
+  - platform: homeassistant
+    id: ha_livingroom_lights_state
+    entity_id: light.livingroom_dimmer
+
+  - platform: homeassistant
+    id: ha_couchlamp_lights_state
+    entity_id: light.kitchen_kitchen_plug
+
+  - platform: homeassistant
+    id: ha_kitchen_lights_state
+    entity_id: light.geeni_ww107_smart_switch
+
+  - platform: homeassistant
+    id: ha_hallway_lights_state
+    entity_id: light.ss02_t1_3s
 
 light:
   # Buzzer wrapped as a "light": brightness = volume
@@ -562,14 +611,14 @@ display:
 
             bool is_pressed = (id(global_touch_index) == i);
             ESP_LOGD("display_lambda","is_pressed=%d",is_pressed);
-            ESP_LOGD("display_lambda","HA state=%d",id(ha_all_lights_state).state);
-            if (i == 0 && id(ha_all_lights_state).state) {
+            ESP_LOGD("display_lambda","HA state %d = %d",i,id(BUTTON_ARRAY[i].ha_entity_id).state);
+            #ESP_LOGD("display_lambda","HA LIVINGROOM state=%d",id(ha_livingroom_lights_state).state);
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+            if (id(BUTTON_ARRAY[i].ha_entity_id).state) {
               it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
-              it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
               it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
             } else {
               it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
-              it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
               it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_off);
             }
           }
