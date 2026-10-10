@@ -353,7 +353,7 @@ binary_sensor:
     
   - platform: homeassistant
     id: ha_all_lights_state
-    entity_id: lights.allmylights
+    entity_id: light.allmylights
 
 light:
   # Buzzer wrapped as a "light": brightness = volume
