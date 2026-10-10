@@ -339,9 +339,6 @@ binary_sensor:
     touchscreen_id: sticky_touch
     name: "STICKY ALL LIGHTS TOUCH BUTTON"
     id: all_lights_touch
-    # Define the bounding box coordinates on your screen
-    #// All LIGHTS BUTTON
-    #it.rectangle(60, 340, 360, 120, COLOR_OFF);
     x_min: 60
     x_max: 420
     y_min: 340
@@ -353,19 +350,11 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
-      #- lambda: |-
-      #    id(global_touch_index) = 0; // Save the active array loop index
-    #on_release:
-      #- lambda: |-
-      #    id(global_touch_index) = -1; // Reset back to no touch
 
   - platform: touchscreen
     touchscreen_id: sticky_touch
     name: "STICKY LIVINGROOM TOUCH BUTTON"
     id: livingroom_touch
-    # Define the bounding box coordinates on your screen
-    #// All LIGHTS BUTTON
-    #it.rectangle(60, 340, 360, 120, COLOR_OFF);
     x_min: 60
     x_max: 240
     y_min: 460
@@ -377,20 +366,54 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
-      #- lambda: |-
-      #    id(global_touch_index) = 1; // Save the active array loop index
-    #on_release:
-      #- lambda: |-
-      #    id(global_touch_index) = -1; // Reset back to no touch
 
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY COUCH TOUCH BUTTON"
+    id: couch_touch
+    x_min: 240
+    x_max: 420
+    y_min: 460
+    y_max: 580
+    on_press:
+      - logger.log: "Couch Lamp Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
 
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY KITCHEN TOUCH BUTTON"
+    id: couch_touch
+    x_min: 60
+    x_max: 240
+    y_min: 580
+    y_max: 700
+    on_press:
+      - logger.log: "Couch Kitchen Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
 
-
-
-
-
-
-
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY HALLWAY TOUCH BUTTON"
+    id: couch_touch
+    x_min: 240
+    x_max: 420
+    y_min: 580
+    y_max: 700
+    on_press:
+      - logger.log: "Couch Hallway Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
 
   - platform: homeassistant
     id: ha_all_lights_state
