@@ -16,7 +16,7 @@ struct ButtonConfig {
 };
 
 // Define the array of buttons
-const ButtonConfig BUTTON_ARRAY[] = {
+ButtonConfig BUTTON_ARRAY[] = {
     { 240,  400, 360, 120, "ALL LIGHTS", "STICKY ALL LIGHTS TOUCH BUTTON", "all_lights_touch", "TURN ON", "TURN OFF", "light.allmylights" , nullptr},
     { 150, 520, 180, 120, "LIVINGROOM", "STICKY LIVINGROOM TOUCH BUTTON", "livingroom_touch", "ON", "OFF" , "light.livingroom_dimmer", nullptr},
     { 330, 520, 180, 120, "COUCH LAMP", "STICKY COUCHLAMP TOUCH BUTTON", "couch_touch", "ON", "OFF", "light.kitchen_kitchen_plug", nullptr},
