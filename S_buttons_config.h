@@ -22,7 +22,7 @@ const ButtonConfig BUTTON_ARRAY[] = {
     { 330, 520, 180, 120, "COUCH LAMP", "STICKY COUCHLAMP TOUCH BUTTON", "couch_touch", "ON", "OFF", "light.kitchen_kitchen_plug", "ha_couchlamp_lights_state"},
     { 150,  640, 180, 120, "KITCHEN", "STICKY KITCHEN TOUCH BUTTON", "kitchen_touch", "ON", "OFF", "light.geeni_ww107_smart_switch", "ha_kitchen_lights_state"},
     { 330, 640, 180, 120, "HALLWAY", "STICKY HALLWAY TOUCH BUTTON", "hallway_touch", "ON", "OFF", "light.ss02_t1_3s", "ha_hallway_lights_state"}
-}
+};
 
 // Calculate total buttons automatically so you don't have to hardcode sizes
 const int NUM_BUTTONS = sizeof(BUTTON_ARRAY) / sizeof(BUTTON_ARRAY[0]);
