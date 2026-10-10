@@ -417,7 +417,7 @@ touchscreen:
           // Find which button index was pressed, set global_touch_index = i...
           
           // Force a partial refresh ONLY inside the button's boundaries
-          auto &btn = BUTTON_ARRAY[global_touch_index];
+          auto &btn = BUTTON_ARRAY[id(global_touch_index)];
           int x_start = btn.x - (btn.width / 2);
           int y_start = btn.y - (btn.height / 2);
           
