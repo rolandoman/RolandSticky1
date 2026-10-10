@@ -352,6 +352,10 @@ binary_sensor:
           id(global_touch_index) = -1; // Reset back to no touch
     
 
+  - platform: homeassistant
+    id: ha_all_lights_state
+    entity_id: lights.allmylights
+
 light:
   # Buzzer wrapped as a "light": brightness = volume
   # 蜂鸣器包装成"灯"实体：亮度 = 音量
