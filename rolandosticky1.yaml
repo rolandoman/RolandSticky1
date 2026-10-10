@@ -62,7 +62,7 @@ esphome:
 
       #- delay: 60s
       - script.execute: enter_sleep_sequence
-      - lambda |-
+      - lambda: |-
         BUTTON_ARRAY[0].ha_sensor = id(ha_all_lights_state);
         BUTTON_ARRAY[1].ha_sensor = id(ha_livingroom_lights_state);
         BUTTON_ARRAY[2].ha_sensor = id(ha_couchlamp_lights_state);
