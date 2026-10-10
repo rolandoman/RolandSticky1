@@ -1,3 +1,4 @@
+
 <#
 .SYNOPSIS
     update-and-flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
