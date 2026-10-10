@@ -1,17 +1,17 @@
 <#
 .SYNOPSIS
-    update_flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
+    update_and_flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
 .DESCRIPTION
     Forces Git to pull the latest configurations, activates the stable Python 3.12 
-    virtual environment, and runs the ESPHome compilation/flash binary sequence.
+    virtual environment, and runs ESPHome via direct python injection to bypass launcher errors.
 #>
 
 \$ErrorActionPreference = "Stop"
 
-# --- CONFIGURATION (Adjust paths as needed) ---
-ProjectDir = "Home\Documents\E_INK_PROJECTS\RolandSticky1"
-VenvActivate = "Home\esphome_env\venv\Scripts\Activate.ps1"
-\$YamlFile    = "rolandsticky1.yaml" # Replace with your exact device YAML filename
+# --- CONFIGURATION ---
+\$ProjectDir   = "C:\Users\rolan\Dropbox\My PC (LAPTOP-T9DG581H)\Documents\E_INK_PROJECTS\RolandSticky1"
+\$VenvPython   = "C:\Users\rolan\esphome_env\venv\Scripts\python.exe"
+\$YamlFile     = "rolandosticky1.yaml"
 
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host " Starting ESPHome Update & Flash Automation" -ForegroundColor Cyan
@@ -28,40 +28,28 @@ if (Test-Path \$ProjectDir) {
 # 2. Pull latest changes from GitHub
 Write-Host "`n[i] Fetching latest changes from GitHub..." -ForegroundColor Yellow
 try {
-    # Fetch and pull cleanly
     git fetch --all
-    $gitStatus = git pull --ff-only
-    Write-Host "[✓] Git Pull Success: $gitStatus" -ForegroundColor Green
+    \$gitStatus = git pull --ff-only
+    Write-Host "[✓] Git Pull Success: \$gitStatus" -ForegroundColor Green
 }
 catch {
-    Write-Warning "Git pull encountered issues. Attempting to proceed anyway..."
+    Write-Warning "Git pull encountered issues (e.g., local changes or network). Attempting to proceed with compilation anyway..."
 }
 
-# 3. Activate the Python Virtual Environment
-Write-Host "`n[i] Activating Python Virtual Environment..." -ForegroundColor Yellow
-if (Test-Path \$VenvActivate) {
-    # Dot-source the activation script to keep variables in scope
-    . \$VenvActivate
-    Write-Host "[✓] Virtual Environment Activated." -ForegroundColor Green
+# 3. Verify Python Virtual Environment Executable Exists
+Write-Host "`n[i] Validating Python 3.12 Virtual Environment..." -ForegroundColor Yellow
+if (Test-Path $VenvPython) {
+    Write-Host "[✓] Found stable Python environment at: $VenvPython" -ForegroundColor Green
 } else {
-    Write-Error "Virtual environment activation script not found at: \$VenvActivate. Please ensure your Python 3.12 environment is installed there."
+    Write-Error "Virtual environment Python executable not found at: $VenvPython.`nPlease ensure your Python 3.12 environment is built there."
 }
 
-# 4. Verify ESPHome command availability
-try {
-    \$esphomePath = (Get-Command esphome).Source
-    Write-Host "[✓] Found ESPHome binary: \$esphomePath" -ForegroundColor Green
-}
-catch {
-    Write-Error "ESPHome command line tool not found. Check if it is fully installed inside your venv."
-}
-
-# 5. Run ESPHome Compile and Upload
+# 4. Run ESPHome Compile and Upload using Direct Module Bypass
 Write-Host "`n[i] Compiling and flashing $YamlFile..." -ForegroundColor Yellow
 Write-Host "---------------------------------------------------" -ForegroundColor Gray
 
-# Executes the compilation and starts looking for local/network targets to flash
-esphome run $YamlFile
+# Executes using the explicit python binary + module flag to ignore the broken AppData esphome.exe path
+& $VenvPython -m esphome run $YamlFile
 
 Write-Host "`n=============================================" -ForegroundColor Green
 Write-Host " Process Complete!" -ForegroundColor Green
