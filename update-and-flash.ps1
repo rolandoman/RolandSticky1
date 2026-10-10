@@ -10,20 +10,20 @@
 \$ErrorActionPreference = "Stop"
 
 # --- CONFIGURATION ---
-\$ProjectDir   = "C:\Users\rolan\Dropbox\My PC (LAPTOP-T9DG581H)\Documents\E_INK_PROJECTS\RolandSticky1"
-\$VenvPython   = "C:\Users\rolan\esphome_env\venv\Scripts\python.exe"
-\$YamlFile     = "rolandosticky1.yaml"
+$ProjectDir   = "C:\Users\rolan\Dropbox\My PC (LAPTOP-T9DG581H)\Documents\E_INK_PROJECTS\RolandSticky1"
+$VenvPython   = "C:\Users\rolan\esphome_env\venv\Scripts\python.exe"
+$YamlFile     = "rolandosticky1.yaml"
 
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host " Starting ESPHome Update & Flash Automation" -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
 
 # 1. Navigate to your project directory
-if (Test-Path \$ProjectDir) {
-    Set-Location \$ProjectDir
-    Write-Host "[✓] Moved to project directory: \$ProjectDir" -ForegroundColor Green
+if (Test-Path $ProjectDir) {
+    Set-Location $ProjectDir
+    Write-Host "[✓] Moved to project directory: $ProjectDir" -ForegroundColor Green
 } else {
-    Write-Error "Project directory not found at: \$ProjectDir"
+    Write-Error "Project directory not found at: $ProjectDir"
 }
 
 # 2. Pull latest changes from GitHub
@@ -39,10 +39,10 @@ catch {
 
 # 3. Verify Python Virtual Environment Executable Exists
 Write-Host "`n[i] Validating Python 3.12 Virtual Environment..." -ForegroundColor Yellow
-if (Test-Path \$VenvPython) {
-    Write-Host "[✓] Found stable Python environment at: \$VenvPython" -ForegroundColor Green
+if (Test-Path $VenvPython) {
+    Write-Host "[✓] Found stable Python environment at: $VenvPython" -ForegroundColor Green
 } else {
-    Write-Error "Virtual environment Python executable not found at: \$VenvPython. Please ensure your Python 3.12 environment is built there."
+    Write-Error "Virtual environment Python executable not found at: $VenvPython. Please ensure your Python 3.12 environment is built there."
 }
 
 # 4. Run ESPHome Compile and Upload using Direct Module Bypass
