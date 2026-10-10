@@ -568,7 +568,7 @@ display:
           ESP_LOGD("display", "=== ePaper display refresh ===");
 
           // ---- Title / 标题 ----
-           it.printf(240, 15, id(font_medium), COLOR_OFF, TextAlign::TOP_CENTER, "Rolando Livingroom Sticky");
+           it.printf(240, 15, id(font_medium), COLOR_OFF, TextAlign::TOP_CENTER, "Livingroom Sticky");
            it.line(20, 55, 460, 55, COLOR_OFF);
 
           // ---- RTC Time / RTC 时间 ----
