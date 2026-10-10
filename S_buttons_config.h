@@ -12,7 +12,7 @@ struct ButtonConfig {
     const char* action_label_off;
     const char* action_label_on;
     const char* ha_entity_id;
-    binary_sensor::HomeAssistantBinarySensor* ha_sensor;
+    esphome::homeassistant::HomeAssistantBinarySensor* ha_sensor;
 };
 
 // Define the array of buttons
