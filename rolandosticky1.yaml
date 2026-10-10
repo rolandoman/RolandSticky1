@@ -351,7 +351,6 @@ binary_sensor:
       - lambda: |-
           id(global_touch_index) = -1; // Reset back to no touch
     
-text_sensor:
   - platform: homeassistant
     id: ha_all_lights_state
     entity_id: lights.allmylights
