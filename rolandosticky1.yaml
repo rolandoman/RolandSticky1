@@ -427,6 +427,7 @@ touchscreen:
       - lambda: |-
           // 3. RESTART SLEEP TIMER: Kick off a fresh 60-second inactivity countdown
           id(enter_sleep_sequence)->execute();
+          id(global_touch_index) = -1; // Reset back to no touch
       
     transform: 
       mirror_y: true
