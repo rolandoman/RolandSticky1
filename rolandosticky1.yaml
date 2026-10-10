@@ -421,7 +421,7 @@ touchscreen:
           int x_start = btn.x - (btn.width / 2);
           int y_start = btn.y - (btn.height / 2);
           
-          id(epaper_display).update_window(x_start, y_start, btn.width, btn.height);
+          id(epaper_display).update();
            
     on_release:
       - lambda: |-
@@ -556,7 +556,8 @@ display:
       
           for (int i = 0; i < NUM_BUTTONS; i++) {
 
-            bool is_pressed = id(global_touch_index)->value() == i;
+            bool is_pressed = false;
+            if (global_touch_index != -1 ) {is_pressed = true;}
 
             if (is_pressed) {
               it.filled.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, Color::BLACK);
