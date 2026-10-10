@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    update_and_flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
+    update-and-flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
 .DESCRIPTION
     Forces Git to pull the latest configurations, activates the stable Python 3.12 
     virtual environment, and runs ESPHome via direct python injection to bypass launcher errors.
@@ -29,8 +29,8 @@ if (Test-Path \$ProjectDir) {
 Write-Host "`n[i] Fetching latest changes from GitHub..." -ForegroundColor Yellow
 try {
     git fetch --all
-    \$gitStatus = git pull --ff-only
-    Write-Host "[✓] Git Pull Success: \$gitStatus" -ForegroundColor Green
+    $gitStatus = git pull --ff-only
+    Write-Host "[✓] Git Pull Success: $gitStatus" -ForegroundColor Green
 }
 catch {
     Write-Warning "Git pull encountered issues (e.g., local changes or network). Attempting to proceed with compilation anyway..."
@@ -38,10 +38,10 @@ catch {
 
 # 3. Verify Python Virtual Environment Executable Exists
 Write-Host "`n[i] Validating Python 3.12 Virtual Environment..." -ForegroundColor Yellow
-if (Test-Path $VenvPython) {
-    Write-Host "[✓] Found stable Python environment at: $VenvPython" -ForegroundColor Green
+if (Test-Path \$VenvPython) {
+    Write-Host "[✓] Found stable Python environment at: \$VenvPython" -ForegroundColor Green
 } else {
-    Write-Error "Virtual environment Python executable not found at: $VenvPython.`nPlease ensure your Python 3.12 environment is built there."
+    Write-Error "Virtual environment Python executable not found at: \$VenvPython. Please ensure your Python 3.12 environment is built there."
 }
 
 # 4. Run ESPHome Compile and Upload using Direct Module Bypass
