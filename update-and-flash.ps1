@@ -7,7 +7,7 @@
     virtual environment, and runs ESPHome via direct python injection to bypass launcher errors.
 #>
 
-\$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 
 # --- CONFIGURATION ---
 $ProjectDir   = "C:\Users\rolan\Dropbox\My PC (LAPTOP-T9DG581H)\Documents\E_INK_PROJECTS\RolandSticky1"
