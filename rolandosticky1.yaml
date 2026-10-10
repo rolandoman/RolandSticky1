@@ -31,6 +31,12 @@ substitutions:
   device_name: rolandsticky1
   friendly_name: "rolandsticky1"
 
+globals:
+  - id: global_touch_index
+    type: int
+    restore_value: no
+    initial_value: '-1'
+
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
@@ -339,7 +345,11 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
-
+      lambda: |-
+        id(global_touch_index) = 1; // Save the active array loop index
+    on_release
+      lambda: |-
+        id(global_touch_index) = -1; // Reset back to no touch
     
 
 light:
@@ -404,6 +414,14 @@ touchscreen:
           args: [touch.x, touch.y]
       - lambda: |-
           id(enter_sleep_sequence)->stop();
+          // Find which button index was pressed, set global_touch_index = i...
+          
+          // Force a partial refresh ONLY inside the button's boundaries
+          auto &btn = BUTTON_ARRAY[global_touch_index];
+          int x_start = btn.x - (btn.width / 2);
+          int y_start = btn.y - (btn.height / 2);
+          
+          id(my_display).update_window(x_start, y_start, btn.width, btn.height);
            
     on_release:
       - lambda: |-
@@ -537,9 +555,16 @@ display:
           it.printf(240, 290, id(font_medium), COLOR_OFF, TextAlign::TOP_CENTER, "LIGHTING CONTROL");
       
           for (int i = 0; i < NUM_BUTTONS; i++) {
-            it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
-            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
-            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
+
+            bool is_pressed = global_touch_index == i; 
+
+            if (is_pressed) {
+              it.filled.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, Color::BLACK);
+            } else {
+              it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+              it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+              it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
+            }
           }
 
 
