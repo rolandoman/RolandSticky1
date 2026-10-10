@@ -11,7 +11,7 @@
 # --- CONFIGURATION (Adjust paths as needed) ---
 ProjectDir = "Home\Documents\E_INK_PROJECTS\RolandSticky1"
 VenvActivate = "Home\esphome_env\venv\Scripts\Activate.ps1"
-\$YamlFile    = "reterminal-sticky.yaml" # Replace with your exact device YAML filename
+\$YamlFile    = "rolandsticky1.yaml" # Replace with your exact device YAML filename
 
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host " Starting ESPHome Update & Flash Automation" -ForegroundColor Cyan
