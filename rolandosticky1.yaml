@@ -386,7 +386,7 @@ binary_sensor:
   - platform: touchscreen
     touchscreen_id: sticky_touch
     name: "STICKY KITCHEN TOUCH BUTTON"
-    id: couch_touch
+    id: kitchen_touch
     x_min: 60
     x_max: 240
     y_min: 580
@@ -402,7 +402,7 @@ binary_sensor:
   - platform: touchscreen
     touchscreen_id: sticky_touch
     name: "STICKY HALLWAY TOUCH BUTTON"
-    id: couch_touch
+    id: hallway_touch
     x_min: 240
     x_max: 420
     y_min: 580
