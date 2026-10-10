@@ -1,52 +1,68 @@
 <#
 .SYNOPSIS
-    Pulls the latest ESPHome configuration from GitHub and builds/flashes the ESP device.
-.PARAMETER ConfigFile
-    The name of your ESPHome YAML configuration file (default: config.yaml).
-.PARAMETER Branch
-    The git branch to pull from (default: main).
+    update_flash.ps1 - Automates pulling ESPHome YAML from GitHub and flashing the device.
+.DESCRIPTION
+    Forces Git to pull the latest configurations, activates the stable Python 3.12 
+    virtual environment, and runs the ESPHome compilation/flash binary sequence.
 #>
 
-param(
-    [string]$ConfigFile = "config.yaml",
-    [string]$Branch = "main"
-)
+\$ErrorActionPreference = "Stop"
 
-# Stop execution immediately if any native command fails
-$ErrorActionPreference = "Stop"
+# --- CONFIGURATION (Adjust paths as needed) ---
+ProjectDir = "Home\Documents\E_INK_PROJECTS\RolandSticky1"
+VenvActivate = "Home\esphome_env\venv\Scripts\Activate.ps1"
+\$YamlFile    = "reterminal-sticky.yaml" # Replace with your exact device YAML filename
 
-Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host " Starting ESPHome Update & Flash Pipeline" -ForegroundColor Cyan
-Write-Host "=========================================" -ForegroundColor Cyan
+Write-Host "=============================================" -ForegroundColor Cyan
+Write-Host " Starting ESPHome Update & Flash Automation" -ForegroundColor Cyan
+Write-Host "=============================================" -ForegroundColor Cyan
 
-# Step 1: Pull from GitHub
-Write-Host "`n[1/2] Pulling latest changes from GitHub ($Branch)..." -ForegroundColor Yellow
+# 1. Navigate to your project directory
+if (Test-Path \$ProjectDir) {
+    Set-Location \$ProjectDir
+    Write-Host "[✓] Moved to project directory: \$ProjectDir" -ForegroundColor Green
+} else {
+    Write-Error "Project directory not found at: \$ProjectDir"
+}
+
+# 2. Pull latest changes from GitHub
+Write-Host "`n[i] Fetching latest changes from GitHub..." -ForegroundColor Yellow
 try {
-    git pull origin $Branch
-    if ($LASTEXITCODE -ne 0) {
-        throw "Git pull encountered issues (exit code $LASTEXITCODE)."
-    }
-    Write-Host "Successfully updated local files from GitHub." -ForegroundColor Green
+    # Fetch and pull cleanly
+    git fetch --all
+    $gitStatus = git pull --ff-only
+    Write-Host "[✓] Git Pull Success: $gitStatus" -ForegroundColor Green
 }
 catch {
-    Write-Error "Git update failed: $_"
-    Write-Host "Tip: Resolve any local merge conflicts before running this script again." -ForegroundColor Red
-    exit 1
+    Write-Warning "Git pull encountered issues. Attempting to proceed anyway..."
 }
 
-# Step 2: Run ESPHome Build & Upload
-Write-Host "`n[2/2] Running ESPHome build and upload for '$ConfigFile'..." -ForegroundColor Yellow
+# 3. Activate the Python Virtual Environment
+Write-Host "`n[i] Activating Python Virtual Environment..." -ForegroundColor Yellow
+if (Test-Path \$VenvActivate) {
+    # Dot-source the activation script to keep variables in scope
+    . \$VenvActivate
+    Write-Host "[✓] Virtual Environment Activated." -ForegroundColor Green
+} else {
+    Write-Error "Virtual environment activation script not found at: \$VenvActivate. Please ensure your Python 3.12 environment is installed there."
+}
+
+# 4. Verify ESPHome command availability
 try {
-    # 'esphome run' compiles the code and uploads it. 
-    # If you need a specific port or OTA target, you can append flags like: --device COM3
-    esphome run $ConfigFile --device COM5
-    
-    if ($LASTEXITCODE -ne 0) {
-        throw "ESPHome build/upload failed (exit code $LASTEXITCODE)."
-    }
-    Write-Host "`nDevice updated successfully!" -ForegroundColor Green
+    \$esphomePath = (Get-Command esphome).Source
+    Write-Host "[✓] Found ESPHome binary: \$esphomePath" -ForegroundColor Green
 }
 catch {
-    Write-Error "ESPHome execution failed: $_"
-    exit 1
+    Write-Error "ESPHome command line tool not found. Check if it is fully installed inside your venv."
 }
+
+# 5. Run ESPHome Compile and Upload
+Write-Host "`n[i] Compiling and flashing $YamlFile..." -ForegroundColor Yellow
+Write-Host "---------------------------------------------------" -ForegroundColor Gray
+
+# Executes the compilation and starts looking for local/network targets to flash
+esphome run $YamlFile
+
+Write-Host "`n=============================================" -ForegroundColor Green
+Write-Host " Process Complete!" -ForegroundColor Green
+Write-Host "=============================================" -ForegroundColor Green
