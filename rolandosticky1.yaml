@@ -62,6 +62,14 @@ esphome:
 
       #- delay: 60s
       - script.execute: enter_sleep_sequence
+      - lambda |-
+        BUTTON_ARRAY[0].ha_sensor = id(ha_all_lights_state);
+        BUTTON_ARRAY[1].ha_sensor = id(ha_livingroom_lights_state);
+        BUTTON_ARRAY[2].ha_sensor = id(ha_couchlamp_lights_state);
+        BUTTON_ARRAY[3].ha_sensor = id(ha_kitchen_lights_state);
+        BUTTON_ARRAY[4].ha_sensor = id(ha_hallway_lights_state);
+        ESP_LOGI("boot_setup", "Successfully linked Home Assistant tracking sensors to array slots.");
+
   platformio_options:
     build_flags: "-DBOARD_HAS_PSRAM -DCONFIG_SPIRAM_CACHE_WORKAROUND"
     board_build.arduino.memory_type: qio_opi
