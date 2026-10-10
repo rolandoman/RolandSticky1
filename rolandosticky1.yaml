@@ -345,11 +345,11 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
-      lambda: |-
-        id(global_touch_index) = 1; // Save the active array loop index
+      - lambda: |-
+          id(global_touch_index) = 1; // Save the active array loop index
     on_release
-      lambda: |-
-        id(global_touch_index) = -1; // Reset back to no touch
+      - lambda: |-
+          id(global_touch_index) = -1; // Reset back to no touch
     
 
 light:
