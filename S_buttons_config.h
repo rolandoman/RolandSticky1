@@ -11,8 +11,8 @@ struct ButtonConfig {
     const char* entity_id; 
     const char* action_label_off;
     const char* action_label_on;
-    const char* ha_entity_id
-    const char* ha_comms_id
+    const char* ha_entity_id;
+    const char* ha_comms_id;
 };
 
 // Define the array of buttons
