@@ -68,11 +68,6 @@ esphome:
       - script.execute: enter_sleep_sequence
 
 
-wakeup_pin:
-  number: GPIO2
-  mode: INPUT_PULLUP
-  inverted: true
-
 esp32:
   board: seeed_xiao_esp32s3
   framework:
@@ -504,6 +499,11 @@ deep_sleep:
   wakeup_pin: 
     number: GPIO2
     mode: KEEP_AWAKE
+
+wakeup_pin:
+  number: GPIO2
+  mode: INPUT_PULLUP
+  inverted: true
 
 
 script: 
