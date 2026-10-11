@@ -444,10 +444,10 @@ display:
 
         if (id(hum_sensor).has_state()) {
           ESP_LOGD("display", "Humidity: %.1f %%", id(hum_sensor).state);
-          it.printf(100, 300, id(font_large), Color::BLACK, "Humidity:  %.1f %%", id(hum_sensor).state);
+          it.printf(100, 320, id(font_large), Color::BLACK, "Humidity:  %.1f %%", id(hum_sensor).state);
         } else {
           ESP_LOGW("display", "Humidity: NO DATA");
-          it.printf(100, 300, id(font_large), Color::BLACK, "Humidity:  -- %%");
+          it.printf(100, 320, id(font_large), Color::BLACK, "Humidity:  -- %%");
         }
 
         for (int i = 0; i < NUM_BUTTONS; i++) {
@@ -492,10 +492,10 @@ display:
 
         //it.printf(100, 840, id(font_small), Color::BLACK, "PDM Microphone: enabled (GPIO41/42)");
 
-        it.line(70, 1080, 1802, 1080, Color::BLACK);
-        it.printf(100, 1110, id(font_small), Color::BLACK, "KEY0 GPIO3: Right green button");
-        it.printf(100, 1150, id(font_small), Color::BLACK, "KEY1 GPIO4: Middle button");
-        it.printf(100, 1190, id(font_small), Color::BLACK, "KEY2 GPIO5: Left button");
+        it.line(70, 1180, 1802, 1180, Color::BLACK);
+        it.printf(100, 1210, id(font_small), Color::BLACK, "KEY0 GPIO3: Right green button");
+        it.printf(100, 1250, id(font_small), Color::BLACK, "KEY1 GPIO4: Middle button");
+        it.printf(100, 1290, id(font_small), Color::BLACK, "KEY2 GPIO5: Left button");
 
         it.printf(936, 1350, id(font_small), Color::BLACK, TextAlign::TOP_CENTER,
                   "Selected reTerminal hardware features enabled");
