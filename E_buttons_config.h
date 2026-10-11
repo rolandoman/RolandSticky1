@@ -25,7 +25,7 @@ struct ButtonConfig {
 
 // Define the array of buttons
 ButtonConfig BUTTON_ARRAY[] = {
-    { 400,  550, 540, 180, "ALL LIGHTS", "STICKY ALL LIGHTS TOUCH BUTTON", "all_lights_touch", "TURN ON", "TURN OFF", "light.allmylights" , nullptr},
+    { 410,  550, 540, 180, "ALL LIGHTS", "STICKY ALL LIGHTS TOUCH BUTTON", "all_lights_touch", "TURN ON", "TURN OFF", "light.allmylights" , nullptr},
     { 275, 730, 270, 180, "LIVINGROOM", "STICKY LIVINGROOM TOUCH BUTTON", "livingroom_touch", "ON", "OFF" , "light.livingroom_dimmer", nullptr},
     { 545, 730, 270, 180, "COUCH LAMP", "STICKY COUCHLAMP TOUCH BUTTON", "couch_touch", "ON", "OFF", "light.kitchen_kitchen_plug", nullptr},
     { 275,  910, 270, 180, "KITCHEN", "STICKY KITCHEN TOUCH BUTTON", "kitchen_touch", "ON", "OFF", "light.geeni_ww107_smart_switch", nullptr},
