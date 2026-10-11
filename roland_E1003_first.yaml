@@ -66,13 +66,6 @@ esphome:
           mode: GC16
       - display.page.show: page_dashboard
       - script.execute: enter_sleep_sequence
-      - lambda: |-
-          BUTTON_ARRAY[0].ha_sensor = id(ha_all_lights_state);
-          BUTTON_ARRAY[1].ha_sensor = id(ha_livingroom_lights_state);
-          BUTTON_ARRAY[2].ha_sensor = id(ha_couchlamp_lights_state);
-          BUTTON_ARRAY[3].ha_sensor = id(ha_kitchen_lights_state);
-          BUTTON_ARRAY[4].ha_sensor = id(ha_hallway_lights_state);
-          ESP_LOGI("boot_setup", "Successfully linked Home Assistant tracking sensors to array slots.");
 
 
 esp32:
@@ -288,107 +281,6 @@ binary_sensor:
     id: sd_card_detect
     name: "SD Card Detected"
 
-  - platform: touchscreen
-    touchscreen_id: e1003_touch
-    name: "E1003 ALL LIGHTS TOUCH BUTTON"
-    id: all_lights_touch
-    x_min: 140
-    x_max: 680
-    y_min: 460
-    y_max: 640
-    on_press:
-      - logger.log: "All Lights Button Pressed!"
-      - light.turn_on:
-          id: buzzer
-          brightness: 50%
-      - delay: 400ms
-      - light.turn_off: buzzer
-
-  - platform: touchscreen
-    touchscreen_id: e1003_touch
-    name: "E1003 LIVINGROOM TOUCH BUTTON"
-    id: livingroom_touch
-    x_min: 140
-    x_max: 410
-    y_min: 640
-    y_max: 820
-    on_press:
-      - logger.log: "Livingroom Button Pressed!"
-      - light.turn_on:
-          id: buzzer
-          brightness: 50%
-      - delay: 400ms
-      - light.turn_off: buzzer
-
-  - platform: touchscreen
-    touchscreen_id: e1003_touch
-    name: "E1003 COUCH TOUCH BUTTON"
-    id: couch_touch
-    x_min: 410
-    x_max: 680
-    y_min: 640
-    y_max: 820
-    on_press:
-      - logger.log: "Couch Lamp Button Pressed!"
-      - light.turn_on:
-          id: buzzer
-          brightness: 50%
-      - delay: 400ms
-      - light.turn_off: buzzer
-
-  - platform: touchscreen
-    touchscreen_id: e1003_touch
-    name: "E1003 KITCHEN TOUCH BUTTON"
-    id: kitchen_touch
-    x_min: 140
-    x_max: 410
-    y_min: 820
-    y_max: 1000
-    on_press:
-      - logger.log: "Kitchen Button Pressed!"
-      - light.turn_on:
-          id: buzzer
-          brightness: 50%
-      - delay: 400ms
-      - light.turn_off: buzzer
-
-  - platform: touchscreen
-    touchscreen_id: e1003_touch
-    name: "E1003 HALLWAY TOUCH BUTTON"
-    id: hallway_touch
-    x_min: 410
-    x_max: 680
-    y_min: 820
-    y_max: 1000
-    on_press:
-      - logger.log: "Hallway Button Pressed!"
-      - light.turn_on:
-          id: buzzer
-          brightness: 50%
-      - delay: 400ms
-      - light.turn_off: buzzer
-
-  - platform: homeassistant
-    id: ha_all_lights_state
-    entity_id: light.allmylights
-
-  - platform: homeassistant
-    id: ha_livingroom_lights_state
-    entity_id: light.livingroom_dimmer
-
-  - platform: homeassistant
-    id: ha_couchlamp_lights_state
-    entity_id: light.kitchen_kitchen_plug
-
-  - platform: homeassistant
-    id: ha_kitchen_lights_state
-    entity_id: light.geeni_ww107_smart_switch
-
-  - platform: homeassistant
-    id: ha_hallway_lights_state
-    entity_id: light.ss02_t1_3s
-
-
 light:
   - platform: binary
     name: "Onboard LED"
@@ -481,8 +373,8 @@ touchscreen:
       allow_other_uses: true
     reset_pin: GPIO48
     transform:
-      mirror_x: false
-      mirror_y: false
+      mirror_x: true
+      mirror_y: true
     on_touch:
       - logger.log:
           format: "Touch: x=%d, y=%d"
@@ -565,16 +457,16 @@ display:
           //ESP_LOGD("display_lambda","HA state %d = %d",i,BUTTON_ARRAY[i].ha_sensor->state);
             
             
-          if (BUTTON_ARRAY[i].ha_sensor->state) {
+          //if (BUTTON_ARRAY[i].ha_sensor->state) {
             it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
             it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
             it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
-          } else {
+          //} else {
               
-            it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
-            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_off);
-            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
-          }
+          //  it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+          //  it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_off);
+          //  it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+          //}
         }
 
 
@@ -669,4 +561,3 @@ script:
 # wifi_password: "Your WiFi Password"
 # ota_password: "choose-a-strong-password"
 # api_encryption_key: "generate with: openssl rand -base64 32"
-
