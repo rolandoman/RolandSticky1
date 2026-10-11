@@ -401,74 +401,75 @@ display:
     transform:
       mirror_x: true
       mirror_y: false
-  - id: page_dashboard
-    lambda: |-
-      ESP_LOGD("display", "=== ePaper display refresh ===");
-      it.fill(Color::WHITE);
+    pages:
+    - id: page_dashboard
+      lambda: |-
+        ESP_LOGD("display", "=== ePaper display refresh ===");
+        it.fill(Color::WHITE);
 
-      it.printf(936, 35, id(font_large), Color::BLACK, TextAlign::TOP_CENTER,
-                "Hallway Art Dashboard");
-      it.line(70, 120, 1802, 120, Color::BLACK);
+        it.printf(936, 35, id(font_large), Color::BLACK, TextAlign::TOP_CENTER,
+                  "Hallway Art Dashboard");
+        it.line(70, 120, 1802, 120, Color::BLACK);
 
-      auto now = id(rtc_time).now();
-      if (now.is_valid()) {
-        it.strftime(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
-                    "%Y-%m-%d  %H:%M", now);
-        ESP_LOGD("display", "RTC time: %04d-%02d-%02d %02d:%02d",
-                 now.year, now.month, now.day_of_month, now.hour, now.minute);
-      } else {
-        it.printf(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
-                  "RTC: waiting for sync...");
-        ESP_LOGW("display", "RTC: not synced yet");
-      }
+        auto now = id(rtc_time).now();
+        if (now.is_valid()) {
+          it.strftime(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
+                      "%Y-%m-%d  %H:%M", now);
+          ESP_LOGD("display", "RTC time: %04d-%02d-%02d %02d:%02d",
+                   now.year, now.month, now.day_of_month, now.hour, now.minute);
+        } else {
+          it.printf(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
+                    "RTC: waiting for sync...");
+          ESP_LOGW("display", "RTC: not synced yet");
+        }
 
-      if (id(temp_sensor).has_state()) {
-        ESP_LOGD("display", "Temperature: %.1f C", id(temp_sensor).state);
-        it.printf(100, 300, id(font_large), Color::BLACK, "Temp: %.1f C", id(temp_sensor).state);
-      } else {
-        ESP_LOGW("display", "Temperature: NO DATA");
-        it.printf(100, 300, id(font_large), Color::BLACK, "Temp: -- C");
-      }
+        if (id(temp_sensor).has_state()) {
+          ESP_LOGD("display", "Temperature: %.1f C", id(temp_sensor).state);
+          it.printf(100, 300, id(font_large), Color::BLACK, "Temp: %.1f C", id(temp_sensor).state);
+        } else {
+          ESP_LOGW("display", "Temperature: NO DATA");
+          it.printf(100, 300, id(font_large), Color::BLACK, "Temp: -- C");
+        }
 
-      if (id(hum_sensor).has_state()) {
-        ESP_LOGD("display", "Humidity: %.1f %%", id(hum_sensor).state);
-        it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  %.1f %%", id(hum_sensor).state);
-      } else {
-        ESP_LOGW("display", "Humidity: NO DATA");
-        it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  -- %%");
-      }
+        if (id(hum_sensor).has_state()) {
+          ESP_LOGD("display", "Humidity: %.1f %%", id(hum_sensor).state);
+          it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  %.1f %%", id(hum_sensor).state);
+        } else {
+          ESP_LOGW("display", "Humidity: NO DATA");
+          it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  -- %%");
+        }
 
-      if (id(battery_level).has_state()) {
-        ESP_LOGD("display", "Battery: %.0f%%  Voltage: %.2fV",
-                 id(battery_level).state, id(battery_voltage).state);
-        it.printf(100, 600, id(font_medium), Color::BLACK, "Battery: %.0f%%  (%.2fV)",
-                  id(battery_level).state, id(battery_voltage).state);
-      } else {
-        it.printf(100, 600, id(font_medium), Color::BLACK, "Battery: --");
-      }
+        if (id(battery_level).has_state()) {
+          ESP_LOGD("display", "Battery: %.0f%%  Voltage: %.2fV",
+                   id(battery_level).state, id(battery_voltage).state);
+          it.printf(100, 600, id(font_medium), Color::BLACK, "Battery: %.0f%%  (%.2fV)",
+                    id(battery_level).state, id(battery_voltage).state);
+        } else {
+          it.printf(100, 600, id(font_medium), Color::BLACK, "Battery: --");
+        }
 
-      if (id(sd_card_detect).state) {
-        it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: inserted");
-      } else {
-        it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: not detected");
-      }
+        if (id(sd_card_detect).state) {
+          it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: inserted");
+        } else {
+          it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: not detected");
+        }
 
-      it.printf(100, 840, id(font_small), Color::BLACK, "PDM Microphone: enabled (GPIO41/42)");
+        it.printf(100, 840, id(font_small), Color::BLACK, "PDM Microphone: enabled (GPIO41/42)");
 
-      it.line(70, 1080, 1802, 1080, Color::BLACK);
-      it.printf(100, 1110, id(font_small), Color::BLACK, "KEY0 GPIO3: Right green button");
-      it.printf(100, 1150, id(font_small), Color::BLACK, "KEY1 GPIO4: Middle button");
-      it.printf(100, 1190, id(font_small), Color::BLACK, "KEY2 GPIO5: Left button");
+        it.line(70, 1080, 1802, 1080, Color::BLACK);
+        it.printf(100, 1110, id(font_small), Color::BLACK, "KEY0 GPIO3: Right green button");
+        it.printf(100, 1150, id(font_small), Color::BLACK, "KEY1 GPIO4: Middle button");
+        it.printf(100, 1190, id(font_small), Color::BLACK, "KEY2 GPIO5: Left button");
 
-      it.printf(936, 1350, id(font_small), Color::BLACK, TextAlign::TOP_CENTER,
-                "Selected reTerminal hardware features enabled");
+        it.printf(936, 1350, id(font_small), Color::BLACK, TextAlign::TOP_CENTER,
+                  "Selected reTerminal hardware features enabled");
 
-  - id: page_sleep
-    lambda: |-
-      // Render the sleep image layout
-      if (id(custom_sleep_img).is_ready()) {
-        it.image(0, 0, id(custom_sleep_img));
-      }
+    - id: page_sleep
+      lambda: |-
+        // Render the sleep image layout
+        if (id(custom_sleep_img).is_ready()) {
+          it.image(0, 0, id(custom_sleep_img));
+        }
 
 
 # =============================================================================
