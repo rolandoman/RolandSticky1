@@ -66,6 +66,13 @@ esphome:
           mode: GC16
       - display.page.show: page_dashboard
       - script.execute: enter_sleep_sequence
+      - lambda: |-
+          BUTTON_ARRAY[0].ha_sensor = id(ha_all_lights_state);
+          BUTTON_ARRAY[1].ha_sensor = id(ha_livingroom_lights_state);
+          BUTTON_ARRAY[2].ha_sensor = id(ha_couchlamp_lights_state);
+          BUTTON_ARRAY[3].ha_sensor = id(ha_kitchen_lights_state);
+          BUTTON_ARRAY[4].ha_sensor = id(ha_hallway_lights_state);
+          ESP_LOGI("boot_setup", "Successfully linked Home Assistant tracking sensors to array slots.");
 
 
 esp32:
@@ -280,6 +287,107 @@ binary_sensor:
       inverted: true
     id: sd_card_detect
     name: "SD Card Detected"
+
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY ALL LIGHTS TOUCH BUTTON"
+    id: all_lights_touch
+    x_min: 140
+    x_max: 680
+    y_min: 340
+    y_max: 520
+    on_press:
+      - logger.log: "All Lights Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY LIVINGROOM TOUCH BUTTON"
+    id: livingroom_touch
+    x_min: 140
+    x_max: 545
+    y_min: 460
+    y_max: 640
+    on_press:
+      - logger.log: "Livingroom Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY COUCH TOUCH BUTTON"
+    id: couch_touch
+    x_min: 410
+    x_max: 680
+    y_min: 460
+    y_max: 640
+    on_press:
+      - logger.log: "Couch Lamp Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY KITCHEN TOUCH BUTTON"
+    id: kitchen_touch
+    x_min: 140
+    x_max: 545
+    y_min: 580
+    y_max: 710
+    on_press:
+      - logger.log: "Kitchen Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: sticky_touch
+    name: "STICKY HALLWAY TOUCH BUTTON"
+    id: hallway_touch
+    x_min: 410
+    x_max: 680
+    y_min: 580
+    y_max: 710
+    on_press:
+      - logger.log: "Hallway Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: homeassistant
+    id: ha_all_lights_state
+    entity_id: light.allmylights
+
+  - platform: homeassistant
+    id: ha_livingroom_lights_state
+    entity_id: light.livingroom_dimmer
+
+  - platform: homeassistant
+    id: ha_couchlamp_lights_state
+    entity_id: light.kitchen_kitchen_plug
+
+  - platform: homeassistant
+    id: ha_kitchen_lights_state
+    entity_id: light.geeni_ww107_smart_switch
+
+  - platform: homeassistant
+    id: ha_hallway_lights_state
+    entity_id: light.ss02_t1_3s
+
 
 light:
   - platform: binary
