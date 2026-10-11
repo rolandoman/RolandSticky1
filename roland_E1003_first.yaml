@@ -423,30 +423,30 @@ display:
 
         auto now = id(rtc_time).now();
         if (now.is_valid()) {
-          it.strftime(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
-                      "%Y-%m-%d  %H:%M", now);
+          it.strftime(936, 160, id(font_large), Color::BLACK, TextAlign::TOP_CENTER,
+                      "%a %b %m, %Y   %H:%M", now);
           ESP_LOGD("display", "RTC time: %04d-%02d-%02d %02d:%02d",
                    now.year, now.month, now.day_of_month, now.hour, now.minute);
         } else {
-          it.printf(936, 160, id(font_medium), Color::BLACK, TextAlign::TOP_CENTER,
+          it.printf(936, 160, id(font_large), Color::BLACK, TextAlign::TOP_CENTER,
                     "RTC: waiting for sync...");
           ESP_LOGW("display", "RTC: not synced yet");
         }
 
         if (id(temp_sensor).has_state()) {
           ESP_LOGD("display", "Temperature: %.1f C", id(temp_sensor).state);
-          it.printf(100, 300, id(font_large), Color::BLACK, "Temp: %.1f C", id(temp_sensor).state);
+          it.printf(100, 250, id(font_large), Color::BLACK, "Temperature: %.1f C", id(temp_sensor).state);
         } else {
           ESP_LOGW("display", "Temperature: NO DATA");
-          it.printf(100, 300, id(font_large), Color::BLACK, "Temp: -- C");
+          it.printf(100, 250, id(font_large), Color::BLACK, "Temperature: -- C");
         }
 
         if (id(hum_sensor).has_state()) {
           ESP_LOGD("display", "Humidity: %.1f %%", id(hum_sensor).state);
-          it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  %.1f %%", id(hum_sensor).state);
+          it.printf(500, 250, id(font_large), Color::BLACK, "Humidity:  %.1f %%", id(hum_sensor).state);
         } else {
           ESP_LOGW("display", "Humidity: NO DATA");
-          it.printf(100, 430, id(font_large), Color::BLACK, "Hum:  -- %%");
+          it.printf(500, 250, id(font_large), Color::BLACK, "Humidity:  -- %%");
         }
 
         if (id(battery_level).has_state()) {
