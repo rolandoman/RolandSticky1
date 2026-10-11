@@ -290,7 +290,7 @@ binary_sensor:
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
-    name: "STICKY ALL LIGHTS TOUCH BUTTON"
+    name: "E1003 ALL LIGHTS TOUCH BUTTON"
     id: all_lights_touch
     x_min: 140
     x_max: 680
@@ -306,7 +306,7 @@ binary_sensor:
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
-    name: "STICKY LIVINGROOM TOUCH BUTTON"
+    name: "E1003 LIVINGROOM TOUCH BUTTON"
     id: livingroom_touch
     x_min: 140
     x_max: 410
@@ -322,7 +322,7 @@ binary_sensor:
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
-    name: "STICKY COUCH TOUCH BUTTON"
+    name: "E1003 COUCH TOUCH BUTTON"
     id: couch_touch
     x_min: 410
     x_max: 680
@@ -338,7 +338,7 @@ binary_sensor:
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
-    name: "STICKY KITCHEN TOUCH BUTTON"
+    name: "E1003 KITCHEN TOUCH BUTTON"
     id: kitchen_touch
     x_min: 140
     x_max: 410
@@ -354,7 +354,7 @@ binary_sensor:
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
-    name: "STICKY HALLWAY TOUCH BUTTON"
+    name: "E1003 HALLWAY TOUCH BUTTON"
     id: hallway_touch
     x_min: 410
     x_max: 680
