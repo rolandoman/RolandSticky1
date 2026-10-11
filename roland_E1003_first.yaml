@@ -289,7 +289,7 @@ binary_sensor:
     name: "SD Card Detected"
 
   - platform: touchscreen
-    touchscreen_id: sticky_touch
+    touchscreen_id: e1003_touch
     name: "STICKY ALL LIGHTS TOUCH BUTTON"
     id: all_lights_touch
     x_min: 140
@@ -305,7 +305,7 @@ binary_sensor:
       - light.turn_off: buzzer
 
   - platform: touchscreen
-    touchscreen_id: sticky_touch
+    touchscreen_id: e1003_touch
     name: "STICKY LIVINGROOM TOUCH BUTTON"
     id: livingroom_touch
     x_min: 140
@@ -321,7 +321,7 @@ binary_sensor:
       - light.turn_off: buzzer
 
   - platform: touchscreen
-    touchscreen_id: sticky_touch
+    touchscreen_id: e1003_touch
     name: "STICKY COUCH TOUCH BUTTON"
     id: couch_touch
     x_min: 410
@@ -337,7 +337,7 @@ binary_sensor:
       - light.turn_off: buzzer
 
   - platform: touchscreen
-    touchscreen_id: sticky_touch
+    touchscreen_id: e1003_touch
     name: "STICKY KITCHEN TOUCH BUTTON"
     id: kitchen_touch
     x_min: 140
@@ -353,7 +353,7 @@ binary_sensor:
       - light.turn_off: buzzer
 
   - platform: touchscreen
-    touchscreen_id: sticky_touch
+    touchscreen_id: e1003_touch
     name: "STICKY HALLWAY TOUCH BUTTON"
     id: hallway_touch
     x_min: 410
