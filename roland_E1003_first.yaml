@@ -289,20 +289,6 @@ binary_sensor:
     id: sd_card_detect
     name: "SD Card Detected"
 
-light:
-  - platform: binary
-    name: "Onboard LED"
-    output: bsp_led
-    id: onboard_led
-
-  # Buzzer wrapped as a "light": brightness = volume
-  # 蜂鸣器包装成"灯"实体：亮度 = 音量
-  - platform: monochromatic
-    output: buzzer_pwm
-    name: "Buzzer"
-    id: buzzer
-    default_transition_length: 0s
-
 
   - platform: homeassistant
     id: ha_E_all_lights_state
@@ -324,6 +310,20 @@ light:
     id: ha_E_hallway_lights_state
     entity_id: light.ss02_t1_3s
 
+
+light:
+  - platform: binary
+    name: "Onboard LED"
+    output: bsp_led
+    id: onboard_led
+
+  # Buzzer wrapped as a "light": brightness = volume
+  # 蜂鸣器包装成"灯"实体：亮度 = 音量
+  - platform: monochromatic
+    output: buzzer_pwm
+    name: "Buzzer"
+    id: buzzer
+    default_transition_length: 0s
 
 time:
   # PCF8563 is at I2C address 0x51 with a CR1220 coin cell backup.
