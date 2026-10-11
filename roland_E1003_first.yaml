@@ -458,13 +458,13 @@ display:
           it.printf(1700, 600, id(font_medium), Color::BLACK, TextAlign::TOP_RIGHT, "Battery: --");
         }
 
-        #if (id(sd_card_detect).state) {
-        #  it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: inserted");
-        #} else {
-        #  it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: not detected");
-        #}
+        //if (id(sd_card_detect).state) {
+        //  it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: inserted");
+        //} else {
+        //  it.printf(100, 760, id(font_small), Color::BLACK, "SD Card: not detected");
+        //}
 
-        #it.printf(100, 840, id(font_small), Color::BLACK, "PDM Microphone: enabled (GPIO41/42)");
+        //it.printf(100, 840, id(font_small), Color::BLACK, "PDM Microphone: enabled (GPIO41/42)");
 
         it.line(70, 1080, 1802, 1080, Color::BLACK);
         it.printf(100, 1110, id(font_small), Color::BLACK, "KEY0 GPIO3: Right green button");
