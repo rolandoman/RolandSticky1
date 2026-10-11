@@ -294,8 +294,8 @@ binary_sensor:
     id: all_lights_touch
     x_min: 140
     x_max: 680
-    y_min: 340
-    y_max: 520
+    y_min: 460
+    y_max: 640
     on_press:
       - logger.log: "All Lights Button Pressed!"
       - light.turn_on:
@@ -309,9 +309,9 @@ binary_sensor:
     name: "STICKY LIVINGROOM TOUCH BUTTON"
     id: livingroom_touch
     x_min: 140
-    x_max: 545
-    y_min: 460
-    y_max: 640
+    x_max: 410
+    y_min: 640
+    y_max: 820
     on_press:
       - logger.log: "Livingroom Button Pressed!"
       - light.turn_on:
@@ -326,8 +326,8 @@ binary_sensor:
     id: couch_touch
     x_min: 410
     x_max: 680
-    y_min: 460
-    y_max: 640
+    y_min: 640
+    y_max: 820
     on_press:
       - logger.log: "Couch Lamp Button Pressed!"
       - light.turn_on:
@@ -341,9 +341,9 @@ binary_sensor:
     name: "STICKY KITCHEN TOUCH BUTTON"
     id: kitchen_touch
     x_min: 140
-    x_max: 545
-    y_min: 580
-    y_max: 710
+    x_max: 410
+    y_min: 820
+    y_max: 1000
     on_press:
       - logger.log: "Kitchen Button Pressed!"
       - light.turn_on:
@@ -358,8 +358,8 @@ binary_sensor:
     id: hallway_touch
     x_min: 410
     x_max: 680
-    y_min: 580
-    y_max: 710
+    y_min: 820
+    y_max: 1000
     on_press:
       - logger.log: "Hallway Button Pressed!"
       - light.turn_on:
