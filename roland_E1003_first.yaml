@@ -64,6 +64,7 @@ esphome:
       - it8951.update:
           id: epaper_display
           mode: GC16
+      - display.page.show: page_dashboard
       - script.execute: enter_sleep_sequence
 
 esp32:
@@ -327,6 +328,12 @@ ota:
 wifi:
   ssid: "IrregularApocalypse"
   password: "S1!gnus1B1138"
+  on_connect:
+    then:
+      - logger.log: "Wi-Fi Connected! Warming up online image buffers..."
+      - component.update: custom_sleep_img
+      - delay: 2s
+      #- component.update: epaper_display
   ap:
     ssid: "reTerminal-E1003"
     password: "ChangeMe123"
