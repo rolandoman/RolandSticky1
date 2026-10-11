@@ -27,8 +27,8 @@ substitutions:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
-  includes:
-    - E_buttons_config.h
+  #includes:
+  #  - E_buttons_config.h
   on_boot:
     priority: -100
     then:
