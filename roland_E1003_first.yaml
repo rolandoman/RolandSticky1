@@ -498,9 +498,10 @@ deep_sleep:
     mode: ANY_LOW
   wakeup_pin: 
     number: GPIO2
+    allow_other_uses: true
     mode: INPUT_PULLUP
     inverted: true
-    mode: KEEP_AWAKE
+    #mode: KEEP_AWAKE
 
 
 script: 
