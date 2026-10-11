@@ -303,6 +303,28 @@ light:
     id: buzzer
     default_transition_length: 0s
 
+
+  - platform: homeassistant
+    id: ha_E_all_lights_state
+    entity_id: light.allmylights
+
+  - platform: homeassistant
+    id: ha_E_livingroom_lights_state
+    entity_id: light.livingroom_dimmer
+
+  - platform: homeassistant
+    id: ha_E_couchlamp_lights_state
+    entity_id: light.kitchen_kitchen_plug
+
+  - platform: homeassistant
+    id: ha_E_kitchen_lights_state
+    entity_id: light.geeni_ww107_smart_switch
+
+  - platform: homeassistant
+    id: ha_E_hallway_lights_state
+    entity_id: light.ss02_t1_3s
+
+
 time:
   # PCF8563 is at I2C address 0x51 with a CR1220 coin cell backup.
   # On boot we read the RTC; when HA syncs, we write back to the RTC.
