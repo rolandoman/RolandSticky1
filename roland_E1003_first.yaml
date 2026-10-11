@@ -72,7 +72,8 @@ esp32:
   board: seeed_xiao_esp32s3
   framework:
     type: esp-idf
-
+    advanced:
+      enable_idf_experimental_features: true
 
 # OPI PSRAM stores the full 16-level grayscale framebuffer.
 # The IT8951 display requires this external memory on E1003.
