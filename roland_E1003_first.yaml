@@ -27,8 +27,8 @@ substitutions:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
-  #includes:
-  #  - E_buttons_config.h
+  includes:
+    - E_buttons_config.h
   on_boot:
     priority: -100
     then:
@@ -448,6 +448,31 @@ display:
           ESP_LOGW("display", "Humidity: NO DATA");
           it.printf(100, 400, id(font_large), Color::BLACK, "Humidity:  -- %%");
         }
+
+        for (int i = 0; i < NUM_BUTTONS; i++) {
+
+          //bool is_pressed = (id(global_touch_index) == i);
+          //ESP_LOGD("display_lambda","is_pressed=%d",is_pressed);
+          //ESP_LOGD("display_lambda","HA state %d = %d",i,BUTTON_ARRAY[i].ha_sensor->state);
+            
+            
+          //if (BUTTON_ARRAY[i].ha_sensor->state) {
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+            it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
+          //} else {
+              
+          //  it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+          //  it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_off);
+          //  it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+          //}
+        }
+
+
+
+
+
+
 
         if (id(battery_level).has_state()) {
           ESP_LOGD("display", "Battery: %.0f%%  Voltage: %.2fV",
