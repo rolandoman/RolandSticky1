@@ -27,8 +27,8 @@ substitutions:
 esphome:
   name: ${device_name}
   friendly_name: ${friendly_name}
-  #includes:
-  #  - S_buttons_config.h
+  includes:
+    - E_buttons_config.h
   on_boot:
     priority: -100
     then:
@@ -64,6 +64,7 @@ esphome:
       - it8951.update:
           id: epaper_display
           mode: GC16
+      - script.execute: enter_sleep_sequence
 
 esp32:
   board: seeed_xiao_esp32s3
@@ -373,6 +374,20 @@ touchscreen:
 # Requires ESPHome >= 2026.7.0
 # =============================================================================
 
+http_request:
+  useragent: esphome
+
+online_image:
+  - url: "http://10.84.84.115:8123/local/images/E1003_display.png" # Path to your HA www folder
+    id: custom_sleep_img
+    format: PNG
+    resize: 1872x1404
+    type: GRAYSCALE
+    update_interval: 12h  
+    on_download_finished:
+      then:
+        - component.update: epaper_display
+
 display:
   - platform: it8951
     id: epaper_display
@@ -386,6 +401,7 @@ display:
     transform:
       mirror_x: true
       mirror_y: false
+  - id: page_dashboard
     lambda: |-
       ESP_LOGD("display", "=== ePaper display refresh ===");
       it.fill(Color::WHITE);
@@ -447,6 +463,14 @@ display:
       it.printf(936, 1350, id(font_small), Color::BLACK, TextAlign::TOP_CENTER,
                 "Selected reTerminal hardware features enabled");
 
+  - id: page_sleep
+    lambda: |-
+      // Render the sleep image layout
+      if (id(custom_sleep_img).is_ready()) {
+        it.image(0, 0, id(custom_sleep_img));
+      }
+
+
 # =============================================================================
 # [10] Deep sleep
 # The device wakes, updates sensors and display, then sleeps.
@@ -455,14 +479,39 @@ display:
 
 deep_sleep:
   id: deep_sleep_1
-  run_duration: 90s
-  sleep_duration: 5min
+  #run_duration: 90s
+  #sleep_duration: 5min
   esp32_ext1_wakeup:
     pins:
       - number: GPIO3
         allow_other_uses: true
         mode: INPUT_PULLUP
     mode: ANY_LOW
+
+
+script: 
+  id: enter_sleep_sequence
+  mode: restart
+  then: 
+    - delay: 60s
+    # 1. Switch to the sleep screen page
+    - display.page.show: page_sleep
+    - component.update: epaper_display
+    
+    # 2. Give ESPHome 100 milliseconds of free processor time 
+    # to schedule and launch the display driver rendering cycle
+    - delay: 100ms
+    
+    # 3. Now wait out the full 10 seconds to let the physical 
+    # electronic ink settle into place before dropping power
+    - delay: 10s
+    
+    # 4. Safely enter deep sleep
+    - deep_sleep.enter: deep_sleep_1
+
+
+
+
 
 # secrets.yaml (create this file alongside your config):
 # wifi_ssid: "Your WiFi SSID"
