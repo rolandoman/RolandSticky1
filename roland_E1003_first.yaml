@@ -21,8 +21,8 @@
 # Serial debug: UART0 via CH340K USB bridge
 # =============================================================================
 substitutions:
-  device_name: reterminal-e1003
-  friendly_name: "reTerminal_E1003"
+  device_name: roland-e1003
+  friendly_name: "roland_E1003"
 
 esphome:
   name: ${device_name}
@@ -391,7 +391,7 @@ display:
       it.fill(Color::WHITE);
 
       it.printf(936, 35, id(font_large), Color::BLACK, TextAlign::TOP_CENTER,
-                "reTerminal E1003 Dashboard");
+                "Hallway Art Dashboard");
       it.line(70, 120, 1802, 120, Color::BLACK);
 
       auto now = id(rtc_time).now();
