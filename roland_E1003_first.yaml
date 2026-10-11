@@ -367,7 +367,9 @@ touchscreen:
   - platform: gt911
     id: e1003_touch
     display: epaper_display
-    interrupt_pin: GPIO2
+    interrupt_pin: 
+      number: GPIO2
+      allow_other_uses: true
     reset_pin: GPIO48
     transform:
       mirror_x: true
