@@ -1,5 +1,12 @@
 #pragma once
 
+// Forward declare the ESPHome namespaces so the compiler knows they exist
+namespace esphome {
+  namespace binary_sensor {
+    class BinarySensor;
+  }
+}
+
 // Define the structure for each button
 struct ButtonConfig {
     int x;  // x - middle of the button
@@ -12,7 +19,8 @@ struct ButtonConfig {
     const char* action_label_off;
     const char* action_label_on;
     const char* ha_entity_id;
-    esphome::homeassistant::HomeassistantBinarySensor* ha_sensor;
+    // FIX: Use the correct, universal binary_sensor namespace class
+    esphome::binary_sensor::BinarySensor* ha_sensor;
 };
 
 // Define the array of buttons
