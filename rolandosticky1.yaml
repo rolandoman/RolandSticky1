@@ -392,7 +392,7 @@ binary_sensor:
     y_min: 580
     y_max: 700
     on_press:
-      - logger.log: "Couch Kitchen Button Pressed!"
+      - logger.log: "Kitchen Button Pressed!"
       - light.turn_on:
           id: buzzer
           brightness: 50%
@@ -408,7 +408,7 @@ binary_sensor:
     y_min: 580
     y_max: 700
     on_press:
-      - logger.log: "Couch Hallway Button Pressed!"
+      - logger.log: "Hallway Button Pressed!"
       - light.turn_on:
           id: buzzer
           brightness: 50%
@@ -500,9 +500,9 @@ touchscreen:
           // Find which button index was pressed, set global_touch_index = i...
           
           // Force a partial refresh ONLY inside the button's boundaries
-          auto &btn = BUTTON_ARRAY[id(global_touch_index)];
-          int x_start = btn.x - (btn.width / 2);
-          int y_start = btn.y - (btn.height / 2);
+          //auto &btn = BUTTON_ARRAY[id(global_touch_index)];
+          //int x_start = btn.x - (btn.width / 2);
+          //int y_start = btn.y - (btn.height / 2);
           
           id(epaper_display).update();
            
@@ -640,8 +640,8 @@ display:
       
           for (int i = 0; i < NUM_BUTTONS; i++) {
 
-            bool is_pressed = (id(global_touch_index) == i);
-            ESP_LOGD("display_lambda","is_pressed=%d",is_pressed);
+            //bool is_pressed = (id(global_touch_index) == i);
+            //ESP_LOGD("display_lambda","is_pressed=%d",is_pressed);
             ESP_LOGD("display_lambda","HA state %d = %d",i,BUTTON_ARRAY[i].ha_sensor->state);
             
             
