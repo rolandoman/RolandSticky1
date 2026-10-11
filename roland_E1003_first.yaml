@@ -444,10 +444,10 @@ display:
 
         if (id(hum_sensor).has_state()) {
           ESP_LOGD("display", "Humidity: %.1f %%", id(hum_sensor).state);
-          it.printf(100, 400, id(font_large), Color::BLACK, "Humidity:  %.1f %%", id(hum_sensor).state);
+          it.printf(100, 300, id(font_large), Color::BLACK, "Humidity:  %.1f %%", id(hum_sensor).state);
         } else {
           ESP_LOGW("display", "Humidity: NO DATA");
-          it.printf(100, 400, id(font_large), Color::BLACK, "Humidity:  -- %%");
+          it.printf(100, 300, id(font_large), Color::BLACK, "Humidity:  -- %%");
         }
 
         for (int i = 0; i < NUM_BUTTONS; i++) {
@@ -478,10 +478,10 @@ display:
         if (id(battery_level).has_state()) {
           ESP_LOGD("display", "Battery: %.0f%%  Voltage: %.2fV",
                    id(battery_level).state, id(battery_voltage).state);
-          it.printf(1700, 600, id(font_medium), Color::BLACK, TextAlign::TOP_RIGHT, "Battery: %.0f%%  (%.2fV)",
+          it.printf(1772, 1110, id(font_small), Color::BLACK, TextAlign::TOP_RIGHT, "Battery: %.0f%%  (%.2fV)",
                     id(battery_level).state, id(battery_voltage).state);
         } else {
-          it.printf(1700, 600, id(font_medium), Color::BLACK, TextAlign::TOP_RIGHT, "Battery: --");
+          it.printf(1772, 1110, id(font_small), Color::BLACK, TextAlign::TOP_RIGHT, "Battery: --");
         }
 
         //if (id(sd_card_detect).state) {
