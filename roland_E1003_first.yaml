@@ -61,11 +61,11 @@ esphome:
       - light.turn_off: buzzer
       - light.turn_off: onboard_led
       - lambda: |-
-          BUTTON_ARRAY[0].ha_sensor = id(ha_all_lights_state);
-          BUTTON_ARRAY[1].ha_sensor = id(ha_livingroom_lights_state);
-          BUTTON_ARRAY[2].ha_sensor = id(ha_couchlamp_lights_state);
-          BUTTON_ARRAY[3].ha_sensor = id(ha_kitchen_lights_state);
-          BUTTON_ARRAY[4].ha_sensor = id(ha_hallway_lights_state);
+          BUTTON_ARRAY[0].ha_sensor = id(ha_E_all_lights_state);
+          BUTTON_ARRAY[1].ha_sensor = id(ha_E_livingroom_lights_state);
+          BUTTON_ARRAY[2].ha_sensor = id(ha_E_couchlamp_lights_state);
+          BUTTON_ARRAY[3].ha_sensor = id(ha_E_kitchen_lights_state);
+          BUTTON_ARRAY[4].ha_sensor = id(ha_E_hallway_lights_state);
           ESP_LOGI("boot_setup", "Successfully linked Home Assistant tracking sensors to array slots.");
       - delay: 2s
       - it8951.update:
