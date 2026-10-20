@@ -498,7 +498,7 @@ touchscreen:
           //int x_start = btn.x - (btn.width / 2);
           //int y_start = btn.y - (btn.height / 2);
           
-          id(epaper_display).update();
+          //id(epaper_display).update();
 
 # =============================================================================
 # [1] ePaper display (10.3" 16-level grayscale, 1872x1404, IT8951)
