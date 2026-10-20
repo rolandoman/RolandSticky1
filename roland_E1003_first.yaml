@@ -330,6 +330,8 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
+      - delay: 600ms
+      - component.update: epaper_display
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
@@ -346,6 +348,8 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
+      - delay: 600ms
+      - component.update: epaper_display
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
@@ -362,6 +366,8 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
+      - delay: 600ms
+      - component.update: epaper_display
 
   - platform: touchscreen
     touchscreen_id: e1003_touch
@@ -378,6 +384,8 @@ binary_sensor:
           brightness: 50%
       - delay: 400ms
       - light.turn_off: buzzer
+      - delay: 600ms
+      - component.update: epaper_display
 
 
   - platform: homeassistant
