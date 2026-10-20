@@ -305,6 +305,70 @@ binary_sensor:
       - delay: 400ms
       - light.turn_off: buzzer
 
+- platform: touchscreen
+    touchscreen_id: e1003_touch
+    name: "E1003 LIVINGROOM TOUCH BUTTON"
+    id: livingroom_touch
+    x_min: 140
+    x_max: 410
+    y_min: 640
+    y_max: 820
+    on_press:
+      - logger.log: "Livingroom Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: e1003_touch
+    name: "E1003 COUCH TOUCH BUTTON"
+    id: couch_touch
+    x_min: 410
+    x_max: 680
+    y_min: 640
+    y_max: 820
+    on_press:
+      - logger.log: "Couch Lamp Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: e1003_touch
+    name: "E1003 KITCHEN TOUCH BUTTON"
+    id: kitchen_touch
+    x_min: 140
+    x_max: 410
+    y_min: 820
+    y_max: 1000
+    on_press:
+      - logger.log: "Kitchen Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
+  - platform: touchscreen
+    touchscreen_id: e1003_touch
+    name: "E1003 HALLWAY TOUCH BUTTON"
+    id: hallway_touch
+    x_min: 410
+    x_max: 680
+    y_min: 820
+    y_max: 1000
+    on_press:
+      - logger.log: "Hallway Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
 
   - platform: homeassistant
     id: ha_E_all_lights_state
