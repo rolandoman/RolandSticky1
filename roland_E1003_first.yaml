@@ -305,7 +305,7 @@ binary_sensor:
       - delay: 400ms
       - light.turn_off: buzzer
 
-- platform: touchscreen
+  - platform: touchscreen
     touchscreen_id: e1003_touch
     name: "E1003 LIVINGROOM TOUCH BUTTON"
     id: livingroom_touch
