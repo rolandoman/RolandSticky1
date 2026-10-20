@@ -525,7 +525,6 @@ display:
     spi_id: epaper_spi_bus
     model: seeed-reterminal-e1003
     update_interval: never
-    full_update_every: 30
     grayscale: true
     dithering: true
     update_mode: GC16
