@@ -73,12 +73,12 @@ esphome:
           mode: GC16
       
       # Wait until Home Assistant connects via the API and syncs states
-      - wait_until:
-          api.connected:
+      #- wait_until:
+      #    api.connected:
       # Give it an extra 2 seconds for state variables to securely populate into memory
-      - delay: 2s
-      - logger.log: "Home Assistant connected and states synced. Updating E1003 display."
-      - component.update: epaper_display
+      #- delay: 2s
+      #- logger.log: "Home Assistant connected and states synced. Updating E1003 display."
+      #- component.update: epaper_display
       - display.page.show: page_dashboard
       - script.execute: enter_sleep_sequence
 
