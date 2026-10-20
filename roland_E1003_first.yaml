@@ -289,6 +289,22 @@ binary_sensor:
     id: sd_card_detect
     name: "SD Card Detected"
 
+  - platform: touchscreen
+    touchscreen_id: e1003_touch
+    name: "E1003 ALL LIGHTS TOUCH BUTTON"
+    id: all_lights_touch
+    x_min: 140
+    x_max: 680
+    y_min: 460
+    y_max: 640
+    on_press:
+      - logger.log: "All Lights Button Pressed!"
+      - light.turn_on:
+          id: buzzer
+          brightness: 50%
+      - delay: 400ms
+      - light.turn_off: buzzer
+
 
   - platform: homeassistant
     id: ha_E_all_lights_state
@@ -409,6 +425,16 @@ touchscreen:
       - logger.log:
           format: "Touch: x=%d, y=%d"
           args: ["touch.x", "touch.y"]
+      - lambda: |-
+          id(enter_sleep_sequence)->stop();
+          // Find which button index was pressed, set global_touch_index = i...
+          
+          // Force a partial refresh ONLY inside the button's boundaries
+          //auto &btn = BUTTON_ARRAY[id(global_touch_index)];
+          //int x_start = btn.x - (btn.width / 2);
+          //int y_start = btn.y - (btn.height / 2);
+          
+          id(epaper_display).update();
 
 # =============================================================================
 # [1] ePaper display (10.3" 16-level grayscale, 1872x1404, IT8951)
@@ -487,16 +513,16 @@ display:
           //ESP_LOGD("display_lambda","HA state %d = %d",i,BUTTON_ARRAY[i].ha_sensor->state);
             
             
-          //if (BUTTON_ARRAY[i].ha_sensor->state) {
+          if (BUTTON_ARRAY[i].ha_sensor->state) {
             it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
             it.rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
             it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_OFF, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_on);
-          //} else {
+          } else {
               
-          //  it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
-          //  it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_off);
-          //  it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
-          //}
+            it.filled_rectangle(int ( BUTTON_ARRAY[i].x - BUTTON_ARRAY[i].width/2 ) , int ( BUTTON_ARRAY[i].y - BUTTON_ARRAY[i].height/2 ), BUTTON_ARRAY[i].width, BUTTON_ARRAY[i].height, COLOR_OFF);
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 20 ), id(font_large), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].action_label_off);
+            it.printf(int ( BUTTON_ARRAY[i].x ), int ( BUTTON_ARRAY[i].y - 50 ), id(font_small), COLOR_ON, TextAlign::TOP_CENTER, BUTTON_ARRAY[i].label);
+          }
         }
 
 
