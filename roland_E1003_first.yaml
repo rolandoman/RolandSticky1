@@ -611,11 +611,6 @@ display:
         }
 
 
-
-
-
-
-
         if (id(battery_level).has_state()) {
           ESP_LOGD("display", "Battery: %.0f%%  Voltage: %.2fV",
                    id(battery_level).state, id(battery_voltage).state);
