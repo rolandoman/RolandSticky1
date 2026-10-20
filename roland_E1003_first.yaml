@@ -71,6 +71,14 @@ esphome:
       - it8951.update:
           id: epaper_display
           mode: GC16
+      
+      # Wait until Home Assistant connects via the API and syncs states
+      - wait_until:
+          api.connected:
+      # Give it an extra 2 seconds for state variables to securely populate into memory
+      - delay: 2s
+      - logger.log: "Home Assistant connected and states synced. Updating E1003 display."
+      - component.update: epaper_display
       - display.page.show: page_dashboard
       - script.execute: enter_sleep_sequence
 
@@ -428,12 +436,6 @@ time:
 api:
   encryption:
     key: "5+gUSCBgEiuwgZWlsEFOHLHEmrxYFfZEXHbj8QolABo="
-  on_connect:
-    - logger.log: "Connected to Home Assistant, syncing states..."
-    # Optional: Wait a brief moment (e.g., 2-3 seconds) to ensure all initial state packets are received from HA
-    - delay: 3s
-    - logger.log: "Updating E1003 display now after HA connect"
-    - component.update: epaper_display
 
 
 # OTA (Over-The-Air) firmware update / 空中固件更新
