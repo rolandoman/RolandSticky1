@@ -428,7 +428,12 @@ time:
 api:
   encryption:
     key: "5+gUSCBgEiuwgZWlsEFOHLHEmrxYFfZEXHbj8QolABo="
-
+  on_connect:
+    - logger.log: "Connected to Home Assistant, syncing states..."
+    # Optional: Wait a brief moment (e.g., 2-3 seconds) to ensure all initial state packets are received from HA
+    - delay: 3s
+    - logger.log: "Updating E1003 display now after HA connect"
+    - component.update: epaper_display
 
 
 # OTA (Over-The-Air) firmware update / 空中固件更新
